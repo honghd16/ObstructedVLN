@@ -11,7 +11,7 @@ Real-world navigation often involves dealing with ever-changing environments whe
 - [X] Code for DyVLN
 
 ## Installation
-1. Please follow the instructions [(here)](https://github.com/peteanderson80/Matterport3DSimulator#building-using-docker) to install Matterport3D Simulator.
+1. Please follow the instructions [here](https://github.com/peteanderson80/Matterport3DSimulator#building-using-docker) to install Matterport3D Simulator.
 We use the latest version instead of v0.1.
 Make sure the 'import Mattersim' will not raise ImportError.
 
@@ -26,37 +26,93 @@ pip install -r requirements.txt
 ```
 cd Inpainting
 ```
+Download the views images from [here](https://github.com/airsplay/R2R-EnvDrop) and put it in the 'views_img' folder
 
-### Step 1: find redundant edges
+### Step 1: obstruct redundant edges
+change the 'x' to the number of edges you want to block
 ```
-bash run_clip.sh
+python block_edge.py --nums=x
 ```
+Output: 'block_{x}_edge_list.json' file storing all the blocking information.
 
 ### Step 2: localize target node
+```
+python find_view.py
+```
+Output: 'edge_info.json' file storing all the locations of the node pairs
 
 ### Step 3: generate mask
+```
+python generate_mask.py
+```
+Output: 'masks' folder storing all the masks
 
 ### Step 4: inpainting
+```
+python inpaint_pipeline.py --batch_size bs
+```
+Output: 'all_inpaint_results' folder storing all the inpainting results for each obstruction
 
 ### Step 5: clip evaluation
+```
+python evaluate_score.py
+```
+Output: 'inpaint_score.json' file storing the compatibility score for each candidate
 
-### Step 6: GMM training
+### Step 6: GMMs training and inference
+```
+python filter_score.py
+```
+Output: 'inpaint_score_filtered.json' file storing all the qualified candidates
 
 ### Step 7: final choice
+```
+python generate_final_list.py
+```
+Output: 
+1. 'final_list.json' file storing the chosen inpainting names for each edge
+2. 'final_inpaint_results' folder storing the chosen inpainting resutls
 
+### Step 8: view projection
+```
+python project_views.py
+```
+Output: the project views in the 'final_inpaint_results'
 
 ## DyVLN
-```
-cd VLN-DUET
-```
-### Step 1: data download
+We provide the code for training DUET for R2R and DY-R2R here. HAMT and REVERIE will be added soon.
 
+### Step 1: data download
+Please follow the instructions [here](https://github.com/cshizhe/VLN-DUET) to download the annotations, connectivity files, pretrained models and features for R2R.
 
 ### Step 2: shortest path generation
+```
+cd Inpainting
+python generate_shortest_distance.py
+```
+This will generate a "shortest_distances" folder to save the shortest distance dict of the modified graphs
 
+### Step 3: dynamic environments feature extraction
+```
+cd Inpainting
+python compute_feature.py
+```
+This will generate a 'inpaint_features.hdf5' file saving the extracted features by ViT-B/16
 
-### Step 3: finetuning w/o DyVLN
+### Step 4: finetuning w/o DyVLN
+```
+cd VLN-DUET
+mv ../Inpainting/block_*_edge_list.json ./datasets/R2R/annotations
+mv ../Inpainting/inpaint_features.hdf5 ./datasets/R2R/features
+cd map_nav_src
+bash scripts/run_r2r.sh
+```
+You can modify the 'max_train_edge' and 'max_eval_edge' in 'run_r2r.sh' to choose which set of DY_R2R to train and evaluate
 
-
-### Step 4: finetuning with DyVLN
-
+### Step 5: finetuning with DyVLN
+```
+cd VLN-DUET
+cd map_nav_src_dyvln
+bash scripts/run_r2r.sh
+```
+Also modify the 'max_train_edge' and 'max_eval_edge' in 'run_r2r.sh'
