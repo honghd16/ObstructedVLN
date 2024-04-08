@@ -107,7 +107,7 @@ mv ../Inpainting/inpaint_features.hdf5 ./datasets/R2R/features
 cd map_nav_src
 bash scripts/run_r2r.sh
 ```
-You can modify the 'max_train_edge' and 'max_eval_edge' in 'run_r2r.sh' to choose which set of DY_R2R to train and evaluate
+You can modify the 'max_train_edge' and 'max_eval_edge' in 'run_r2r.sh' to choose which set of R2R-UNO to train and evaluate
 
 ### Step 5: finetuning with ObVLN
 ```
