@@ -1,13 +1,13 @@
 # ObstructedVLN
 This repository is the official implementation of the ACM MM 2024 submission "Navigating Beyond Instructions: Vision-and-Language Navigation in Obstructed Environments".
 
-Real-world navigation often involves dealing with unexpected obstructions such as closed doors, moved objects, and unpredictable entities. However, mainstream Vision-and-Language Navigation (VLN) tasks typically assume instructions perfectly align with the fixed and predefined navigation graphs without any obstructions. This assumption overlooks potential discrepancies in navigation graphs and instruction errors, which are prevalent for both indoor and outdoor agents. Therefore, we introduce VOGI (VLN Obstruction Generation by Inpainting), an innovative approach that integrates diverse obstructions into discrete VLN environments. VOGI modifies both the navigation graphs and the visual observations, to 1) assess whether current VLN models genuinely navigate or only follow instructions, and 2) develop effective strategies for agents to bridge this gap. Applying VOGI to the R2R dataset, we develop the R2R with UNexpected Obstructions (R2R-UNO) dataset, which brings different numbers and types of path obstructions to generate mismatches between instructions and reality. Experiments on R2R-UNO reveal that state-of-the-art VLN methods inevitably encounter significant challenges when facing such mismatches. Subsequently, a novel method called ObVLN (Obstructed VLN) is proposed, which includes a curriculum training strategy and virtual graph construction to help agents effectively adapt to obstructed environments. Empirical results show that ObVLN not only maintains robust performance in unobstructed scenarios but also achieves a substantial performance advantage with unexpected obstructions.  
+Real-world navigation often involves dealing with unexpected obstructions such as closed doors, moved objects, and unpredictable entities. However, mainstream Vision-and-Language Navigation (VLN) tasks typically assume instructions perfectly align with the fixed and predefined navigation graphs without any obstructions. This assumption overlooks potential discrepancies in actual navigation graphs and given instructions, which can cause major failures for both indoor and outdoor agents. To address this issue, we integrate diverse obstructions into the R2R dataset by modifying both the navigation graphs and visual observations, introducing an innovative dataset and task, R2R with UNexpected Obstructions (R2R-UNO). R2R-UNO contains various types and numbers of path obstructions to generate instruction-reality mismatches for VLN research. Experiments on R2R-UNO reveal that state-of-the-art VLN methods inevitably encounter significant challenges when facing such mismatches, indicating that they rigidly follow instructions rather than navigate adaptively. Therefore, we propose a novel method called ObVLN (Obstructed VLN), which includes a curriculum training strategy and virtual graph construction to help agents effectively adapt to obstructed environments. Empirical results show that ObVLN not only maintains robust performance in unobstructed scenarios but also achieves a substantial performance advantage with unexpected obstructions.   
 
 ![model_arch](figures/teaser.png)
 
 ## Progress
 - [X] Installation
-- [X] Code for VOGI
+- [X] Code for Generating R2R-UNO
 - [X] Code for ObVLN
 
 ## Installation
@@ -22,7 +22,7 @@ conda activate ObstructedVLN
 pip install -r requirements.txt
 ```
 
-## VOGI for generating R2R-UNO
+## Generating R2R-UNO
 ```
 cd Inpainting
 ```
