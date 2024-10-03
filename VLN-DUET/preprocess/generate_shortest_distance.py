@@ -55,8 +55,8 @@ def load_nav_graphs(connectivity_dir, scans):
     def distance(pose1, pose2):
         ''' Euclidean distance between two graph poses '''
         return ((pose1['pose'][3]-pose2['pose'][3])**2\
-          + (pose1['pose'][7]-pose2['pose'][7])**2\
-          + (pose1['pose'][11]-pose2['pose'][11])**2)**0.5
+            + (pose1['pose'][7]-pose2['pose'][7])**2\
+            + (pose1['pose'][11]-pose2['pose'][11])**2)**0.5
 
     graphs = {}
     for scan in scans:

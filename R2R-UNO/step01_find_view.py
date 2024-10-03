@@ -11,7 +11,7 @@ def get_sim():
     image_h = 480
     vfov = 60
     scan_data_dir = '~/Matterport3D/v1/scans'
-    connectivity_dir = "/../VLN-DUET/datasets/R2R/connectivity"
+    connectivity_dir = "../VLN-DUET/datasets/R2R/connectivity"
         
     sim = MatterSim.Simulator()
     sim.setDatasetPath(scan_data_dir)
@@ -57,9 +57,7 @@ def calculate_views(scanId, viewpointId):
         
         # get adjacent locations
         for j, loc in enumerate(state.navigableLocations[1:]):
-            
             distance = _loc_distance(loc)
-
             if (loc.viewpointId not in adj_dict or
                     distance < adj_dict[loc.viewpointId]['distance']):
                 adj_dict[loc.viewpointId] = {
@@ -90,9 +88,8 @@ def draw_candidate(scanID, viewpointID, candidate):
         cv2.circle(img, (u, v), radius, color, thickness)
         cv2.imwrite(save_path, img)
 
-
 anno_dir = "../VLN-DUET/datasets/R2R/annotations"
-with open(anno_dir+"/R2R_train_enc.json", "r") as f:
+with open(anno_dir + "/R2R_train_enc.json", "r") as f:
     data = json.load(f)
 headings = {p["path_id"]: p["heading"] for p in data}
 
@@ -127,6 +124,5 @@ for scan in tqdm(scans):
                     edge_info[path][f"{edge[0]}_{edge[1]}"] = cand
                     break
             
-
 with open("edge_info.json", "w") as f:
     json.dump(edge_info, f, indent=4)

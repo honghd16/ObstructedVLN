@@ -18,6 +18,23 @@ np.random.seed(args.seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+def process_and_save_batch():
+    with torch.autocast("cuda"):
+        images = pipe(
+            prompt=prompts, 
+            image=view_imgs, 
+            mask_image=mask_imgs, 
+            height=height, 
+            width=width,
+            strength=1.0,
+            guidance_scale=30,
+            negative_prompt=[neg_prompts] * len(prompts)
+        ).images
+    for img, save_path in zip(images, save_paths):
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        img.save(save_path)
+
+
 pipe = StableDiffusionInpaintPipeline.from_pretrained(
     "runwayml/stable-diffusion-inpainting",
     revision="fp16",
@@ -28,7 +45,7 @@ pipe.to("cuda")
 view_dir = "views_img"
 mask_dir = "simple_masks"
 
-with open("block_edge_list.json", "r") as f:
+with open("block_1_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 with open("edge_info.json", "r") as f:
@@ -67,43 +84,21 @@ for obj in objects:
         mask_imgs.append(input_ma)
         prompts.append(capt)
         save_paths.append(mask.replace("masks", "all_inpaint_results").replace(".png", f"_{obj}.jpg"))
+        
+        # Process when batch size is reached
         if len(prompts) == args.batch_size:
-            with torch.autocast("cuda"):
-                images = pipe(prompt=prompts, 
-                            image=view_imgs, 
-                            mask_image=mask_imgs, 
-                            height=height, 
-                            width=width,
-                            strength=1.,
-                            guidance_scale=30,
-                            negative_prompt=[neg_prompts]*args.batch_size,
-                            ).images
-            for j in range(args.batch_size):
-                os.makedirs(os.path.dirname(save_paths[j]), exist_ok=True)
-                images[j].save(save_paths[j])
-            view_imgs = []
-            mask_imgs = []
-            prompts = []
-            save_paths = []
-        elif i == len(views) - 1:
-            with torch.autocast("cuda"):
-                images = pipe(prompt=prompts, 
-                            image=view_imgs, 
-                            mask_image=mask_imgs, 
-                            height=height, 
-                            width=width,
-                            strength=1.,
-                            guidance_scale=30,
-                            negative_prompt=[neg_prompts]*len(prompts),
-                            ).images
-            print(len(prompts))
-            for j in range(len(prompts)):
-                os.makedirs(os.path.dirname(save_paths[j]), exist_ok=True)
-                images[j].save(save_paths[j])
-            view_imgs = []
-            mask_imgs = []
-            prompts = []
-            save_paths = []
-
+            process_and_save_batch()
+            # Clear the lists after processing the batch
+            view_imgs.clear()
+            mask_imgs.clear()
+            prompts.clear()
+            save_paths.clear()
+        
         if i % 100 == 0:
             print(f"{obj}, Done {i}/{len(views)} images!")
+
+    # Process the remaining items if any
+    if prompts:
+        process_and_save_batch()
+
+

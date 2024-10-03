@@ -94,7 +94,7 @@ def get_surrounding_indices(index):
     if col < 11:
         indices.append(index + 1)
     else:
-        indices.append(index - 11)  # Wrap around to the first image in the row
+        indices.append(index - 11)
     
     # Add top neighbor
     if row < 2:
@@ -104,21 +104,41 @@ def get_surrounding_indices(index):
     if row > 0:
         indices.append(index - 12)
     
+    # Add bottom left
+    if row > 0 and col > 0:
+        indices.append(index - 13)
+    elif row > 0 and col == 0:
+        indices.append(index - 1)
+    
+    # Add bottom right
+    if row > 0 and col < 11:
+        indices.append(index - 11)
+    elif row > 0 and col == 11:
+        indices.append(index - 23)
+    
+    # Add top left
+    if row < 2 and col > 0:
+        indices.append(index + 11)
+    elif row < 2 and col == 0:
+        indices.append(index + 24)
+
+    # Add top right
+    if row < 2 and col < 11:
+        indices.append(index + 13)
+    elif row < 2 and col == 11:
+        indices.append(index + 1)
+    
     return indices
 
 def get_surrounding_mask(mask, view_path_1, view_path_2):
-
-    # Load the images
     imgA = cv2.imread(view_path_1)
     imgB = cv2.imread(view_path_2)
 
-    # Find the transformation from imgA to imgB
     try:
         M = find_transform(imgA, imgB)
     except:
         M = None
 
-    # Apply the same transformation to imgC
     final_mask = apply_transform(mask, M)
 
     return final_mask
@@ -157,7 +177,7 @@ def process_scan(scan, block_edge_list, edge_info):
                 cv2.imwrite(os.path.join(mask_path, f"{sur}.png"), sur_mask)
 
 def main():
-    with open("block_edge_list.json", "r") as f:
+    with open("block_1_edge_list.json", "r") as f:
         block_edge_list = json.load(f)
 
     with open("edge_info.json", "r") as f:

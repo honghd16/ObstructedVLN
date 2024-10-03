@@ -1038,18 +1038,5 @@ class GMapNavAgent(Seq2SeqAgent):
             ml_loss = ml_loss * train_ml / batch_size
             self.loss += ml_loss
             self.logs['IL_loss'].append(ml_loss.item())
-
-        # # test whether containing blocks
-        # for i in range(batch_size):
-        #     flat_traj = [item for sublist in traj[i]['path'] for item in sublist]
-        #     for j in range(len(flat_traj)-1):
-        #         edge = (flat_traj[j], flat_traj[j+1])
-        #         block = obs[i]['block']
-        #         if block:
-        #             if edge in block or edge[::-1] in block:
-        #                 print(f"Error: {traj[i]['instr_id']} contains block edge {edge}")
-        #                 print("traj:", flat_traj)
-        #                 print("block:", block)
-        #                 exit(0)
         
         return traj

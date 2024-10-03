@@ -20,7 +20,7 @@ def get_surrounding_indices(index):
     if col < 11:
         indices.append(index + 1)
     else:
-        indices.append(index - 11)  # Wrap around to the first image in the row
+        indices.append(index - 11)
     
     # Add top neighbor
     if row < 2:
@@ -29,6 +29,30 @@ def get_surrounding_indices(index):
     # Add bottom neighbor
     if row > 0:
         indices.append(index - 12)
+    
+    # Add bottom left
+    if row > 0 and col > 0:
+        indices.append(index - 13)
+    elif row > 0 and col == 0:
+        indices.append(index - 1)
+    
+    # Add bottom right
+    if row > 0 and col < 11:
+        indices.append(index - 11)
+    elif row > 0 and col == 11:
+        indices.append(index - 23)
+    
+    # Add top left
+    if row < 2 and col > 0:
+        indices.append(index + 11)
+    elif row < 2 and col == 0:
+        indices.append(index + 24)
+
+    # Add top right
+    if row < 2 and col < 11:
+        indices.append(index + 13)
+    elif row < 2 and col == 11:
+        indices.append(index + 1)
     
     return indices
 
@@ -113,7 +137,7 @@ view_dir = "views_img"
 mask_dir = "masks"
 inpa_dir = "final_inpaint_results"
 
-with open("block_edge_list.json", "r") as f:
+with open("block_1_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 with open("edge_info.json", "r") as f:

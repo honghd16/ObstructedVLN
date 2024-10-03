@@ -5,6 +5,10 @@ from transformers import CLIPProcessor, CLIPModel
 import torch
 from PIL import Image
 from glob import glob
+import numpy as np
+
+from collections import defaultdict
+from sklearn.mixture import GaussianMixture
 
 import torch.multiprocessing as mp
 from progressbar import ProgressBar
@@ -85,13 +89,40 @@ def detect_img():
         progress_bar.finish()
         for process in processes:
             process.join()
-        
+
         json.dump(results, f, indent=4)
 
+def gmm_filter():
+    with open('inpain_score.json', 'r') as f:
+        inpain_score = json.load(f)
+
+    scores = defaultdict(list)
+    names = defaultdict(list)
+    for k, v in inpain_score.items():
+        category = k.split('_')[-1].split('.')[0]
+        scores[category].append(v)
+        names[category].append(k)
+
+    for k, v in scores.items():
+        data = np.array(v)
+        gmm = GaussianMixture(n_components=2, random_state=0).fit(data.reshape(-1, 1))
+        labels = gmm.predict(data.reshape(-1, 1))
+        means = gmm.means_.flatten()
+        variances = gmm.covariances_.flatten()
+        gt_label = int(means[0] < means[1])
+        
+        names[k] = np.array(names[k])[labels == gt_label]
+
+    filtered_names = {}
+    for k, v in inpain_score.items():
+        category = k.split('_')[-1].split('.')[0]
+        if k in names[category]:
+            filtered_names[k] = v
+
+    with open('qualified_candidates.json', 'w') as f:
+        json.dump(filtered_names, f, indent=4)
 
 if __name__ == '__main__':
     mp.set_start_method('spawn')
     detect_img()
-    
-
-    
+    gmm_filter()

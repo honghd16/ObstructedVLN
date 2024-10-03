@@ -68,5 +68,4 @@ CUDA_VISIBLE_DEVICES='0' python r2r/main_nav.py $flag  \
       --resume_file  ../datasets/R2R/trained_models/best_val_unseen \
       --max_train_edge 1 --max_eval_edge 1 \
       --use_inpaint \
-      --search_target \
       --test

@@ -1,9 +1,7 @@
 import os
 import cv2
-import numpy as np
 import json
 import random
-from glob import glob
 
 def get_top3(prefix):
     with open(f"inpaint_score.json", "r") as f:
@@ -15,22 +13,6 @@ def get_top3(prefix):
     top_3_obj = sorted(scores, key=scores.get, reverse=True)[:3]
     return [prefix + top_3_obj[i] + '.jpg' for i in range(3)]
 
-def compare():
-    os.makedirs("compare", exist_ok=True)
-    with open(f"final_list.json", "r") as f:
-        data = json.load(f)
-    for i, (k, v) in enumerate(data.items()):
-        new_k = k.replace("all_inpaint_results", "inpaint_results")
-        final_img = cv2.imread(os.path.join(k,v))
-        new_name = [x for x in os.listdir(new_k) if '_' in x][0]
-        new_img = cv2.imread(os.path.join(new_k, new_name))
-        cmp_img = np.concatenate((final_img, new_img), axis=1)
-        cv2.putText(cmp_img, f"Final: {v.split('_')[1].split('.')[0]}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(cmp_img, f"Origi: {new_name.split('_')[1].split('.')[0]}", (650, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.imwrite(f"compare/{i}.png", cmp_img)
-        if i == 100:
-            break
-
 def put_position():
     with open(f"final_list.json", "r") as f:
         data = json.load(f)
@@ -40,15 +22,14 @@ def put_position():
         os.makedirs(os.path.dirname(new_path), exist_ok=True)
         cv2.imwrite(new_path, final_img)
 
-
 nope_num = 0
 objects = ["chair", "table", "sofa", "potted plant", "basket", "exercise equipment", "vacuum cleaner", "suitcase", "toy", "dog"]
 
-with open(f"inpaint_score_filtered.json", "r") as f:
+with open(f"qualified_candidat.json", "r") as f:
     data = json.load(f)
 
 inpaint_dir = "all_inpaint_results"
-with open(f"block_edge_list.json", "r") as f:
+with open(f"block_1_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 with open(f"edge_info.json", "r") as f:

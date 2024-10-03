@@ -22,8 +22,8 @@ def load_nav_graphs(connectivity_dir, scans):
     def distance(pose1, pose2):
         ''' Euclidean distance between two graph poses '''
         return ((pose1['pose'][3]-pose2['pose'][3])**2\
-          + (pose1['pose'][7]-pose2['pose'][7])**2\
-          + (pose1['pose'][11]-pose2['pose'][11])**2)**0.5
+            + (pose1['pose'][7]-pose2['pose'][7])**2\
+            + (pose1['pose'][11]-pose2['pose'][11])**2)**0.5
 
     graphs = {}
     for scan in scans:
@@ -48,13 +48,10 @@ block_list = defaultdict(lambda: defaultdict(list))
 paths = []
 path_num = 0
 path_block_num = 0
-duplicate_num = 0
-no_end_num = 0
 max_dist = 0
 original_lengths = []
 modified_lengths = []
 for split in splits:
-    
     with open(os.path.join(anno_dir, f"R2R_{split}_enc.json"), "r") as f:
         data = json.load(f)
 
@@ -124,23 +121,9 @@ for split in splits:
                     detailed_path = detailed_path[:edge_idx] + bypass + detailed_path[edge_idx+2:]
                     adjustment += len(bypass) - 2
                     
-                if len(new_path) <= 15:
+                if len(new_path) <= (10 + args.nums*5):
                     block_list[scan][path_id].append((comb, new_path, original_path, detailed_path))
                     modified_lengths.append(len(detailed_path))
-                    # if new_path[-1] != path[-1]:
-                    #     dist = len(new_path)-new_path.index(path[-1])-1
-                    #     max_dist = dist if dist > max_dist else max_dist
-                    #     no_end_num += 1
-
-
-                    if len(new_path) != len(set(new_path)):
-                        duplicate_num += 1
-
-                # if len(detailed_path) - len(path) == 2 and len(path) == 5 and path[1] == detailed_path[1] and path[-2] == detailed_path[-2]:
-                #     print("Detailed path: {}".format(detailed_path))
-                #     print("Original path: {}".format(path))
-                #     print("Scan: {}".format(scan))
-                #     print("Path_id: {}".format(path_id))
 
             G = backup_G.copy()
         
@@ -149,35 +132,15 @@ for split in splits:
         
     path_num += len(data)
 
-    print("Split: {}".format(split))
+    print("Finish split: {}".format(split))
+
 print("path_num: {}, block_path_num: {}".format(path_num, path_block_num))    
-print("no_end_num: {} / {}".format(no_end_num, len(original_lengths)))
 print("max_dist: {}".format(max_dist))
-print("duplicate_num: {} / {}".format(duplicate_num, len(original_lengths)))
 print("original_lengths mean: {}, modified_lengths mean: {}".format(np.mean(original_lengths), np.mean(modified_lengths)))
 print("original_lengths min: {}, modified_lengths min: {}".format(np.min(original_lengths), np.min(modified_lengths)))  
 print("original_lengths max: {}, modified_lengths max: {}".format(np.max(original_lengths), np.max(modified_lengths)))
 print("original_lengths len: {}, modified_lengths len: {}".format(len(original_lengths), len(modified_lengths)))
-print("Modified path > 15 percentage: {}".format(len([x for x in modified_lengths if x > 15])/len(modified_lengths)))
 print("====================================================================")
-    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
-    # ax1.hist(original_lengths, bins=5, color='blue', edgecolor='black')
-    # ax1.set_title(f'Original Distribution {split}')
-    # ax1.set_xlabel('Value')
-    # ax1.set_ylabel('Frequency')
-
-    # # Plot data on the second subplot
-    # ax2.hist(modified_lengths, bins=20, color='red', edgecolor='black')
-    # ax2.set_title(f'Modified Distribution {split}')
-    # ax2.set_xlabel('Value')
-    # ax2.set_ylabel('Frequency')
-
-    # # Adjust the space between the two subfigures
-    # plt.tight_layout()
-
-    # # Show the figure
-    # plt.savefig(f'block_edge_{split}.png')
-    # plt.close()
 
 with open(f'block_{args.nums}_edge_list.json', 'w') as f:
     json.dump(block_list, f, indent=4, sort_keys=True)
