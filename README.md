@@ -76,10 +76,10 @@ Output: the project views in the `final_inpaint_results`
 ## ObVLN
 We provide the code for training DUET for R2R and R2R-UNO here. 
 
-### Step 1: data download
+### Step 0: data download
 Please follow the instructions [here](https://github.com/cshizhe/VLN-DUET) to download the annotations, connectivity files, pre-trained models, and features for R2R.
 
-### Step 2: preprocess
+### Step 1: preprocess
 
 1. generate shortest paths for each blocked path
 
@@ -96,7 +96,7 @@ python compute_feature.py
 ```
 This will generate a `inpaint_features.hdf5` file saving the extracted features by ViT-B/16
 
-### Step 4: finetuning w/o ObVLN
+### Step 2: finetuning w/o ObVLN
 ```
 cd VLN-DUET
 cp ../Inpainting/block_*_edge_list.json ./datasets/R2R/annotations
@@ -106,7 +106,7 @@ bash scripts/run_r2r.sh
 ```
 You can modify the `max_train_edge` and `max_eval_edge`in `run_r2r.sh` to choose which set of R2R-UNO to train and evaluate
 
-### Step 5: finetuning with ObVLN
+### Step 3: finetuning with ObVLN
 ```
 cd VLN-DUET
 cd map_nav_src_obvln
