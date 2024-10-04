@@ -1,5 +1,5 @@
 # ObstructedVLN
-This repository is the official implementation of the ACM MM 2024 paper "Navigating Beyond Instructions: Vision-and-Language Navigation in Obstructed Environments".
+This repository is the official implementation of the ACM MM 2024 [paper](https://arxiv.org/abs/2407.21452) "Navigating Beyond Instructions: Vision-and-Language Navigation in Obstructed Environments".
 
 Real-world navigation often involves dealing with unexpected obstructions such as closed doors, moved objects, and unpredictable entities. However, mainstream Vision-and-Language Navigation (VLN) tasks typically assume instructions perfectly align with the fixed and predefined navigation graphs without any obstructions. This assumption overlooks potential discrepancies in actual navigation graphs and given instructions, which can cause major failures for both indoor and outdoor agents. To address this issue, we integrate diverse obstructions into the R2R dataset by modifying both the navigation graphs and visual observations, introducing an innovative dataset and task, R2R with UNexpected Obstructions (R2R-UNO). R2R-UNO contains various types and numbers of path obstructions to generate instruction-reality mismatches for VLN research. Experiments on R2R-UNO reveal that state-of-the-art VLN methods inevitably encounter significant challenges when facing such mismatches, indicating that they rigidly follow instructions rather than navigate adaptively. Therefore, we propose a novel method called ObVLN (Obstructed VLN), which includes a curriculum training strategy and virtual graph construction to help agents effectively adapt to obstructed environments. Empirical results show that ObVLN not only maintains robust performance in unobstructed scenarios but also achieves a substantial performance advantage with unexpected obstructions.   
 
@@ -113,3 +113,16 @@ cd map_nav_src_obvln
 bash scripts/run_r2r.sh
 ```
 Also modify the `max_train_edge` and `max_eval_edge` in `run_r2r.sh`
+
+## Citation
+
+If you find this work helpful, please consider citing:
+
+```bibtex
+@article{hong2024navigating,
+  title={Navigating Beyond Instructions: Vision-and-Language Navigation in Obstructed Environments},
+  author={Hong, Haodong and Wang, Sen and Huang, Zi and Wu, Qi and Liu, Jiajun},
+  journal={arXiv preprint arXiv:2407.21452},
+  year={2024}
+}
+```
