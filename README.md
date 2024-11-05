@@ -32,13 +32,7 @@ Download the discrete views for Matterport3D from [here](https://github.com/airs
 ```
 python step00_block_edge.py
 ```
-<<<<<<< HEAD
 Output: `block_edge_list.json` file storing all the redundant edges for R2R paths.
-=======
-Output: `block_{x}_edge_list.json` file storing all the blocking information.
-
-**Note:** The following steps only need to be done with the `block_1_edge_list.json`.
->>>>>>> 7bc1cf124f614cd121deb0d18422753915fff82a
 
 ### Step 1: Localize the target node
 ```
