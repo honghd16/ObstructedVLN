@@ -34,6 +34,7 @@ change `x` to the number of edges you want to block
 python step00_block_edge.py --nums=x
 ```
 Output: `block_{x}_edge_list.json` file storing all the blocking information.
+
 **Note:** The following steps only need to be done with the `block_1_edge_list.json`.
 
 ### Step 1: localize the target node
