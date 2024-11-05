@@ -96,7 +96,7 @@ for split in splits:
         data = json.load(f)
     headings.update({p["path_id"]: p["heading"] for p in data})
 
-with open("block_1_edge_list.json", "r") as f:
+with open("block_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 scans = list(block_edge_list.keys())
@@ -111,8 +111,7 @@ for scan in tqdm(scans):
             print("Already in!")
             exit(0)
         edge_info[path] = {}
-        for block_list in block_edge_list[scan][path]:
-            edge = block_list[0][0]
+        for edge in block_edge_list[scan][path]:
             sim.newEpisode([scan], [edge[0]], [headings[int(path)]], [0])
             state = sim.getState()[0]
             assert state.scanId == scan and state.location.viewpointId == edge[0]

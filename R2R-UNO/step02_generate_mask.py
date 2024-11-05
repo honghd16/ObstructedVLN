@@ -3,7 +3,6 @@ import cv2
 import json
 import numpy as np
 from tqdm import tqdm
-from collections import defaultdict
 from multiprocessing import Pool
 
 skip_num = 0
@@ -177,7 +176,7 @@ def process_scan(scan, block_edge_list, edge_info):
                 cv2.imwrite(os.path.join(mask_path, f"{sur}.png"), sur_mask)
 
 def main():
-    with open("block_1_edge_list.json", "r") as f:
+    with open("block_edge_list.json", "r") as f:
         block_edge_list = json.load(f)
 
     with open("edge_info.json", "r") as f:

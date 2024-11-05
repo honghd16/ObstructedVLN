@@ -137,7 +137,7 @@ view_dir = "views_img"
 mask_dir = "masks"
 inpa_dir = "final_inpaint_results"
 
-with open("block_1_edge_list.json", "r") as f:
+with open("block_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 with open("edge_info.json", "r") as f:

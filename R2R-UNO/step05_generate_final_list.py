@@ -29,7 +29,7 @@ with open(f"qualified_candidat.json", "r") as f:
     data = json.load(f)
 
 inpaint_dir = "all_inpaint_results"
-with open(f"block_1_edge_list.json", "r") as f:
+with open(f"block_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 with open(f"edge_info.json", "r") as f:
