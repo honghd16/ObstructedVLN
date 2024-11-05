@@ -12,8 +12,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--nums', type=int, default=1)
 args = parser.parse_args()
 
-anno_dir = "../VLN-DUET/datasets/R2R/annotations"
-connectivity_dir = "../VLN-DUET/datasets/R2R/connectivity"
+anno_dir = "../../VLN-DUET/datasets/R2R/annotations"
+connectivity_dir = "../../VLN-DUET/datasets/R2R/connectivity"
 splits = ["train", 'val_seen', 'val_unseen']
 
 def load_nav_graphs(connectivity_dir, scans):

@@ -89,11 +89,14 @@ def draw_candidate(scanID, viewpointID, candidate):
         cv2.imwrite(save_path, img)
 
 anno_dir = "../VLN-DUET/datasets/R2R/annotations"
-with open(anno_dir + "/R2R_train_enc.json", "r") as f:
-    data = json.load(f)
-headings = {p["path_id"]: p["heading"] for p in data}
+splits = ["train", "val_seen", "val_unseen"]
+headings = {}
+for split in splits:
+    with open(anno_dir + f"/R2R_{split}_enc.json", "r") as f:
+        data = json.load(f)
+    headings.update({p["path_id"]: p["heading"] for p in data})
 
-with open("block_edge_list.json", "r") as f:
+with open("block_1_edge_list.json", "r") as f:
     block_edge_list = json.load(f)
 
 scans = list(block_edge_list.keys())
@@ -108,7 +111,8 @@ for scan in tqdm(scans):
             print("Already in!")
             exit(0)
         edge_info[path] = {}
-        for edge in block_edge_list[scan][path]:
+        for block_list in block_edge_list[scan][path]:
+            edge = block_list[0][0]
             sim.newEpisode([scan], [edge[0]], [headings[int(path)]], [0])
             state = sim.getState()[0]
             assert state.scanId == scan and state.location.viewpointId == edge[0]
