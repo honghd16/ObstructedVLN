@@ -80,30 +80,33 @@ Please follow the instructions [here](https://github.com/cshizhe/VLN-DUET) to do
 
 ### Step 1: preprocess
 
-1. generate three splits for R2R-UNO paths
+1. obstructed environments feature extraction
 
 ```
 cd VLN-DUET/preprocess
+cp ../../R2R-UNO/block_edge_list.json .
+python compute_feature.py
+cp inpaint_features.hdf5 ../datasets/R2R/features
+```
+This will generate a `inpaint_features.hdf5` file saving the extracted features by ViT-B/16
+
+2. generate three splits for R2R-UNO paths
+
+```
 python get_block_data.py --nums=1
 python get_block_data.py --nums=2
 python get_block_data.py --nums=3
 cp block_*_edge_list.json ../datasets/R2R/annotations
 ```
 
-2. generate shortest paths for each blocked path
+3. generate shortest paths for each blocked path
 
 ```
 python generate_shortest_distance.py
 ```
 This will generate a `shortest_distances` folder to save the shortest distance dictionaries of the modified graphs
 
-3. obstructed environments feature extraction
 
-```
-python compute_feature.py
-cp inpaint_features.hdf5 ../datasets/R2R/features
-```
-This will generate a `inpaint_features.hdf5` file saving the extracted features by ViT-B/16
 
 ### Step 2: finetuning w/o ObVLN
 ```
