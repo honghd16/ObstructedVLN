@@ -129,10 +129,11 @@ Also modify the `max_train_edge` and `max_eval_edge` in `run_r2r.sh`
 If you find this work helpful, please consider citing:
 
 ```bibtex
-@article{hong2024navigating,
+@inproceedings{hong2024navigating,
   title={Navigating Beyond Instructions: Vision-and-Language Navigation in Obstructed Environments},
   author={Hong, Haodong and Wang, Sen and Huang, Zi and Wu, Qi and Liu, Jiajun},
-  journal={arXiv preprint arXiv:2407.21452},
+  booktitle={Proceedings of the 32nd ACM International Conference on Multimedia},
+  pages={7639--7648},
   year={2024}
 }
 ```
