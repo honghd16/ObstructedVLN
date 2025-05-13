@@ -119,7 +119,7 @@ def get_surrounding_indices(index):
     if row < 2 and col > 0:
         indices.append(index + 11)
     elif row < 2 and col == 0:
-        indices.append(index + 24)
+        indices.append(index + 23)
 
     # Add top right
     if row < 2 and col < 11:
