@@ -7,7 +7,7 @@ from multiprocessing import Pool
 
 skip_num = 0
 
-mask_dir = "masks"
+mask_dir = "simple_masks"
 view_dir = "views_img"
 
 def create_parallelogram_mask(point, image_shape, width, bias):
